@@ -19,7 +19,7 @@ type CollectdWriter struct {
 // with specified hostname and writer
 func NewCollectdWriter(host string, writer io.Writer) CollectdWriter {
 	return CollectdWriter{
-		host:   host,
+		host:   sanitizeForGraphite(host),
 		writer: writer,
 	}
 }

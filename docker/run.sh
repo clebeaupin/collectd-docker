@@ -1,10 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-set -e
+set -ex
 
-if [ -n "${MESOS_HOST}" ]; then
-  if [ -z "${COLLECTD_HOST}" ]; then
-    export COLLECTD_HOST="${MESOS_HOST}"
+if [ -n "${COLLECTD_HOST}" ]; then
+  VAR=$(eval echo \$${COLLECTD_HOST})
+  if [ -n "${VAR}" ]; then
+    export COLLECTD_HOST="${VAR}"
   fi
 fi
 
@@ -25,5 +26,6 @@ else
   useradd -g docker collectd-docker-collector
 fi
 
-exec reefer -t /etc/collectd/collectd.conf.tpl:/tmp/collectd.conf \
-  collectd -f -C /tmp/collectd.conf "$@" > /dev/null
+# collect does not work when the process is launched by reefer
+reefer -t /etc/collectd/collectd.conf.tpl:/tmp/collectd.conf echo "" > /dev/null
+exec "$@"

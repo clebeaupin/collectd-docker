@@ -64,7 +64,7 @@ func NewMonitor(c MonitorDockerClient, id string, interval int) (*Monitor, error
 		return nil, ErrNoNeedToMonitor
 	}
 
-	task := sanitizeForGraphite(extractTask(container))
+	task := sanitizeForGraphite(extractTask(container)[0:30])
 
 	return &Monitor{
 		client:   c,
@@ -163,5 +163,5 @@ func extractEnv(c *docker.Container, envPrefix string) string {
 }
 
 func sanitizeForGraphite(s string) string {
-	return strings.Replace(s, ".", "_", -1)
+	return strings.Trim(strings.Replace(strings.Replace(strings.Replace(s, ".", "_", -1), "-", "_", -1), "/", "_", -1), "_")
 }
