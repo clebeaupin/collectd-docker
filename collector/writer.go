@@ -34,9 +34,10 @@ func (w CollectdWriter) writeInts(s Stats) error {
 		"cpu.system": s.Stats.CPUStats.CPUUsage.UsageInKernelmode,
 		"cpu.total":  s.Stats.CPUStats.CPUUsage.TotalUsage,
 
-		"memory.limit": s.Stats.MemoryStats.Limit,
-		"memory.max":   s.Stats.MemoryStats.MaxUsage,
-		"memory.usage": s.Stats.MemoryStats.Usage,
+		"memory.limit":   s.Stats.MemoryStats.Limit,
+		"memory.max":     s.Stats.MemoryStats.MaxUsage,
+		"memory.usage":   s.Stats.MemoryStats.Usage,
+		"memory.percent": uint64((float64(s.Stats.MemoryStats.Usage) / float64(s.Stats.MemoryStats.Limit)) * 100.0),
 
 		"memory.active_anon":   s.Stats.MemoryStats.Stats.TotalActiveAnon,
 		"memory.active_file":   s.Stats.MemoryStats.Stats.TotalActiveFile,
